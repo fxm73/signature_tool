@@ -44,8 +44,8 @@
                                                               same -> skip
 
 #Random thoughts
-PS: documentation above might be outdated, it was created before (or during the development) the tool was finished, comments are good so that should be enough
-PS: In retrospect, this is overengineered as fuck, in 2012 different IT guy in $company had a guide in .doc on how to make email signature and it seemed to work?
+PS: comments above might be outdated, it was created before (or during the development) the tool was finished, comments are good so that should be enough
+PS: In retrospect, this is overengineered as fuck, in 2012 different IT guy in our company had a guide in .doc on how to make email signature and it seemed to work?
 		(Overengineering (or over-engineering) is the act of designing a product to be more robust or have more features than necessary for its intended use, or for a process to be unnecessarily complex or inefficient.)
 PS: ^but at least it works well
 #>
@@ -72,7 +72,7 @@ Try{
 	write-host "| +Imported users..."
 	write-host " --------------------------------------------------"
 
-
+	#USER INPUT
 	#because im lazy and id rather hard code accounts that i want to filter out
 	$ignore_list = "TEMP1", "TEMP2"
 
