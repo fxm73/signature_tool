@@ -20,6 +20,8 @@ $test_connection_server = "file_server"
 
 #Location of your script, and generated signatures
 $remote_signature_directory = "\\file_server\Scripts\signature_tool\user_signatures\"
+$ServerLastUpdate_file = "\\file_server\Scripts\signature_tool\templates\last_update.dat"
+
 
 <#
   End of user config
@@ -108,7 +110,6 @@ else{
   }
   else{
   	write-host "+Last update file does exist, comparing it.."
-    $ServerLastUpdate_file = $remote_signature_directory "templates\last_update.dat"
 
     #comparing files does not do anything, you have to compare the content of the file - hence the vars
     $data_from_ServerLastUpdate_file = Get-Content $ServerLastUpdate_file
