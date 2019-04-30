@@ -1,5 +1,7 @@
 # signature_tool
 
+<< TODO: Clean up the code & add user config (as everything is either hardcoded or spread around the whole script, huge mess..)
+
 Powershell script that automatically creates Outlook email signatures for Active Directory users.
 
 Script is provided with a sample email signature, located in "templates" folder, copy the folder contents to "%AppData%\Microsoft\Signatures" & edit through Outlook (File -> Options - Mail -> Signatures).
