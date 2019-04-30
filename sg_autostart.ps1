@@ -1,18 +1,34 @@
-#Signature tool current user
-$current_user = $env:UserName
-
-
 <#
+Signature tool autostart script
+
 silent/quiet powershell startup script
-  checks if its connected to the network - ping DC? if no response -> try again in 10 minutes?
+  checks if its connected to the network - ping file server? if no response -> try again in 10 minutes?
   if connection to the network is successful -> check if the signature exists -> if not copy it and run the regedit script
   -> if the signature exists -> check the date -> if
                                                     different -> copy the signature and copy the generation date
                                                     same -> skip
+------------------------
+  User config
 #>
 
-$sg_ignore_list = "TEMP1", "TEMP2" #funny enough, it doesnt work if it has only 1 item, dunno why, dont care to find out anyway..
+#If you have users you want to skip - as they don't need signature for example, input them here
+#$sg_ignore_list = "", ""
 
+
+#Server within your network that you can ping to test if computer is connected to the network, preferably your file server with the user signatures?
+$test_connection_server = "file_server"
+
+#Location of your script, and generated signatures
+$remote_signature_directory = "\\file_server\Scripts\signature_tool\user_signatures\"
+
+<#
+  End of user config
+  Do not edit anything below if you have no idea what you are doing
+#>
+
+
+#Get current user
+$current_user = $env:UserName
 #if($current_user -in $sg_ignore_list){
 if($current_user -contains $sg_ignore_list){
   write-host "-$current_user is on ignore list, stopping..."
@@ -25,13 +41,13 @@ if($current_user -contains $sg_ignore_list){
   Start-Sleep -s 1
 }
 else{
-  #check if computer can ping to FILESERVER_NAME
+  #check if computer can ping to file server
   function CheckNetwork{
-    if ((Test-Connection FILESERVER_NAME -quiet)){
-      write-host "+FILESERVER_NAME reachable.."
+    if ((Test-Connection $test_connection_server -quiet)){
+      write-host "+$test_connection_server reachable.."
     }else{
       #if not, wait 10 minutes - loop
-      write-host "-Cannot reach FILESERVER_NAME, waiting 10 minutes and trying again."
+      write-host "-Cannot reach $test_connection_server, waiting 10 minutes and trying again."
       write-host "-Possible that the user is not connected to the WiFi/Network."
       Start-Sleep -s 600
       CheckNetwork
@@ -43,8 +59,7 @@ else{
 
 
 
-  #So its easier to change it in the future
-  $remote_signature_directory = "\\FILESERVER_NAME\LOCATION_OF_THE_SCRIPT\signature_tool\user_signatures\"
+
 
   #finding the user's signature
   $user_specific_signature = $remote_signature_directory + $current_user
@@ -93,7 +108,7 @@ else{
   }
   else{
   	write-host "+Last update file does exist, comparing it.."
-    $ServerLastUpdate_file = "\\FILESERVER_NAME\LOCATION_OF_THE_SCRIPT\signature_tool\templates\last_update.dat"
+    $ServerLastUpdate_file = $remote_signature_directory "templates\last_update.dat"
 
     #comparing files does not do anything, you have to compare the content of the file - hence the vars
     $data_from_ServerLastUpdate_file = Get-Content $ServerLastUpdate_file
