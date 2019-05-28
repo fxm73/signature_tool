@@ -74,6 +74,15 @@ else{
 
   #function that does the signature copy & registry hack
   function CopySignatureToLocalUser{
+    #check if folder exists first, to avoid any mess
+    if (Test-Path -Path $OutlookSignatureFolder){
+    #folder exists, move on
+    }
+    else{
+    #folder does not exist, create it
+    New-Item -ItemType directory -Path $OutlookSignatureFolder
+    }
+    
     #copy the signature
     Copy-Item -Path $user_specific_signature_formatted -Destination $OutlookSignatureFolder -recurse -Force
 
